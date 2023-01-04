@@ -91,7 +91,7 @@ public class Runner {
 				if (outputFile.isBlank()) {
 					System.out.println("Please specify an output file");
 				} else {
-					outputText += "Number of unique words: " + fileProcessor.index.size() + "\n";
+					outputText += "Number of unique words: " + fileProcessor.getIndexSize() + "\n";
 					System.out.println("Added to output");
 				}
 

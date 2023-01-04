@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WordDetail {
-	String definition;
-	String word;
-	List<Integer> pages = new ArrayList<>();
+	private String definition;
+	private String word;
+	private List<Integer> pages = new ArrayList<>();
 
 	/**
 	 * Returns the object as a string with the format: "Word: word" "Definition:

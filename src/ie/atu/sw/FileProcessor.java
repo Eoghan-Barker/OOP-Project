@@ -15,9 +15,9 @@ import java.util.concurrent.Executors;
 
 public class FileProcessor {
 
-	Set<String> ignore = new ConcurrentSkipListSet<>();
-	Map<String, String> dictionary = new ConcurrentHashMap<>();
-	Map<String, WordDetail> index = new ConcurrentHashMap<>();
+	private Set<String> ignore = new ConcurrentSkipListSet<>();
+	private Map<String, String> dictionary = new ConcurrentHashMap<>();
+	private Map<String, WordDetail> index = new ConcurrentHashMap<>();
 
 	String commonWordsFile = "./google-1000.txt";
 	String dictionaryFile = "./dictionary.csv";
@@ -129,5 +129,13 @@ public class FileProcessor {
 		}
 
 		return outputString;
+	}
+	
+	/**
+	 * Get the size of the index
+	 * @return
+	 */
+	public int getIndexSize() {
+		return index.size();
 	}
 }
