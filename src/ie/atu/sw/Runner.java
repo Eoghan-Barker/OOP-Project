@@ -1,5 +1,7 @@
 package ie.atu.sw;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.Scanner;
 
 public class Runner {
@@ -11,7 +13,8 @@ public class Runner {
 		int choice;
 		String inputDir = "";
 		String outputFile = "";
-		
+		String outputText = "";
+
 		FileProcessor fileProcessor = new FileProcessor();
 
 		do {
@@ -25,26 +28,27 @@ public class Runner {
 			System.out.println("(2) Configure Dictionary");
 			System.out.println("(3) Configure Common Words");
 			System.out.println("(4) Specify Output File");
-			System.out.println("(5) Execute");
-			System.out.println("(6) Quit");
+			System.out.println("(5) Generate index");
+			System.out.println("(6) Output Number of unique words");
+			System.out.println("(7) Output List of words in alphabetical order");
+			System.out.println("(8) Generate output file & Exit");
 
 			// Output a menu of options and solicit text from the user
-			System.out.print("Select Option [1-6]>");
+			System.out.print("Select Option [1-8]>");
 			choice = scanner.nextInt();
 			scanner.nextLine();
 
 			switch (choice) {
 			case 1:
 				// ./GulliversTravelsSwift.txt
-				
 				System.out.println("Enter file location:");
 				inputDir = scanner.nextLine();
-				
+
 				break;
-				
+
 			case 2:
 				// Read in dictionary
-				fileProcessor.test();
+				fileProcessor.buildDictionary();
 				System.out.println("Dictionary configured");
 				break;
 			case 3:
@@ -59,27 +63,44 @@ public class Runner {
 				break;
 			case 5:
 				// Create index
-				System.out.println(inputDir);
-				if(inputDir.isBlank()) {
+				if (inputDir.isBlank()) {
 					System.out.println("Please specify an input file");
 				} else {
 					fileProcessor.go(inputDir);
 				}
-				
+
 				break;
 			case 6:
-				// Exit
-				System.out.println("Exiting...");
+				// Output num of unique words
+				if (outputFile.isBlank()) {
+					System.out.println("Please specify an output file");
+				} else {
+					outputText += "Number of unique words: " + fileProcessor.index.size() + "\n";
+				}
+
 				break;
 			case 7:
-				// Testing
-				fileProcessor.test();
+				// Output words in alphabetical order
+				if (outputFile.isBlank()) {
+					System.out.println("Please specify an output file");
+				} else {
+					outputText += fileProcessor.orderAlphabetically();
+				}
+				break;
+			case 8:
+				// Exit
+				FileWriter fileWriter = new FileWriter(new File(outputFile));
+				fileWriter.write(outputText);
+				fileWriter.close();
+				
+				System.out.println("Exiting...");
+				break;
 			default:
 				System.out.println("Please choose a valid option \n");
 				break;
 			}
-		} while (choice != 6);
-		
+		} while (choice != 8);
+
 		scanner.close();
 	}
 }

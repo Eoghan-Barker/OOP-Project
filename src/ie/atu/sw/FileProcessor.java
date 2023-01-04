@@ -3,7 +3,10 @@ package ie.atu.sw;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,7 +40,7 @@ public class FileProcessor {
 
 	public void buildDictionary() throws IOException {
 		Files.lines(Paths.get(dictionaryFile)).forEach(text -> {
-			var spliter = text.split(",");
+			String[] spliter = text.split(",");
 			dictionary.put(spliter[0].toLowerCase(), spliter[1]);
 		});
 	}
@@ -45,22 +48,48 @@ public class FileProcessor {
 	public void processText(String text, int lineCount) {
 		// Split the text using whitespace regex
 		Arrays.stream(text.split("\\s+")).forEach(w -> {
-
+			
 			String word = w.replaceAll("[^a-zA-Z]", "");
 
 			// Only add the word to the index if its not in the list of common words
-			if (!ignore.contains(word)) {
-				WordDetail wordInfo = new WordDetail();
+			if (dictionary.containsKey(word) && !ignore.contains(word)) {
+				WordDetail wordInfo = index.get(word);
+				
+				if(wordInfo == null) {
+					wordInfo = new WordDetail();
+				}
+				
 				// Divide the line number by 40(amount of lines in a page) which will
 				// give a truncated whole number. Add 1 as there is no page 0
 				int pageNum = (lineCount / 40) + 1;
 
 				wordInfo.setDefinition(dictionary.get(word));
-				wordInfo.setPage(pageNum);
+				wordInfo.setWord(word);
+				wordInfo.addPage(pageNum);
 				
 				index.put(word, wordInfo);
 			}
 		});
+	}
+	
+	public String orderAlphabetically() {
+		List<String> outputList = new ArrayList<>();
+		String outputString = "";
+		
+		Comparator<WordDetail> compare = (a,b) -> {
+			return a.getWord().compareTo(b.getWord());
+		};
+		
+		
+		index.values().stream().sorted(compare).forEachOrdered((v) -> {
+			outputList.add(v.toString());
+		});
+		
+		for (String string : outputList) {
+			outputString += string;
+		}
+		
+		return outputString;
 	}
 
 	public void test() {
