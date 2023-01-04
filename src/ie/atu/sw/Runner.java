@@ -1,15 +1,29 @@
 package ie.atu.sw;
 
+/**
+ * @author Eoghan Barker
+ * @version 1.0
+ */
+
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Scanner;
 
 public class Runner {
 
+	/**
+	 * Presents the user with a menu of options relating to building an index with
+	 * an input text file, a dictionary.csv file and a text file of common words. It
+	 * always has options for outputing data relating to the index to a user
+	 * specified file.
+	 * 
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception {
 
 		Scanner scanner = new Scanner(System.in);
-		
+
 		int choice;
 		String inputDir = "";
 		String outputFile = "";
@@ -36,6 +50,7 @@ public class Runner {
 			// Output a menu of options and solicit text from the user
 			System.out.print("Select Option [1-8]>");
 			choice = scanner.nextInt();
+			// clear the scanner buffer
 			scanner.nextLine();
 
 			switch (choice) {
@@ -67,6 +82,7 @@ public class Runner {
 					System.out.println("Please specify an input file");
 				} else {
 					fileProcessor.go(inputDir);
+					System.out.println("Index Created");
 				}
 
 				break;
@@ -76,6 +92,7 @@ public class Runner {
 					System.out.println("Please specify an output file");
 				} else {
 					outputText += "Number of unique words: " + fileProcessor.index.size() + "\n";
+					System.out.println("Added to output");
 				}
 
 				break;
@@ -85,14 +102,15 @@ public class Runner {
 					System.out.println("Please specify an output file");
 				} else {
 					outputText += fileProcessor.orderAlphabetically();
+					System.out.println("Added to output");
 				}
 				break;
 			case 8:
-				// Exit
+				// Exit and write to file
 				FileWriter fileWriter = new FileWriter(new File(outputFile));
 				fileWriter.write(outputText);
 				fileWriter.close();
-				
+
 				System.out.println("Exiting...");
 				break;
 			default:
